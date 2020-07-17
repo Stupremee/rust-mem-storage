@@ -17,7 +17,7 @@ a `struct Memory` over and over again and always copy paste methods like
 
 ### Use the Memory trait
 
-```compile_fail
+```rust
 use mem_storage::Memory;
 
 let mem = MyMemory::new();
@@ -42,7 +42,7 @@ assert_eq!(1234567u64, value);
 
 ### Implement the Memory trait
 
-```
+```rust
 use mem_storage::Memory;
 
 /// This time your struct is responsible for storing the data.
