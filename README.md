@@ -20,7 +20,7 @@ The second one is to implement `Memory` for your own struct.
 
 ### Use the Memory trait
 
-```rs
+```rust
 use mem_storage::{Memory, VecMemory};
 
 /// Create 1 KiB of memory
@@ -38,7 +38,7 @@ assert_eq!(12345u64, value);
 ```
 
 ### Wrap a Memory implementation
-```rs
+```rust
 use mem_storage::{Memory, VecMemory, Value};
 
 /// This is your memory struct for the emulator, that wraps methods
@@ -74,7 +74,7 @@ impl Memory {
 
 ### Implement the Memory trait
 
-```rs
+```rust
 /// This time your struct is responsible for storing the data.
 struct Memory {
   ram: Vec<u8>,
@@ -103,3 +103,7 @@ impl mem_storage::Memory for Memory {
   /// The trait will provide a generic `read` and `read_be` method for you.
 }
 ```
+
+## License
+
+This project is double-licensed under the Zlib or Apache2.0 license.
