@@ -3,6 +3,7 @@ name = "mem_storage"
 version = "0.1.0"
 authors = ["Justus K <justus.k@protonmail.com>"]
 edition = "2018"
+description = "Abstractions for readable and writable memory. Designed to be uesd in emulators."
 documentation = "https://docs.rs/mem_storage"
 repository = "https://github.com/Stupremee/rust-mem-storage"
 homepage = "https://github.com/Stupremee/rust-mem-storage"
