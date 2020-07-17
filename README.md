@@ -26,6 +26,8 @@ use mem_storage::{Memory, VecMemory};
 /// Create 1 KiB of memory
 let mem = VecMemory::new(1024 * 1024);
 
+/// The `read` and `write` method will read / write data using little endian format.
+/// For big endian format use `read_be` and `write_be`.
 mem.write(0xABCD, 123);
 
 let value = mem.read::<u8>(0xABCD);
@@ -35,6 +37,11 @@ mem.write(0x1000, 12345u64);
 
 let value = mem.read::<u64>(0x1000);
 assert_eq!(12345u64, value);
+
+mem.write_be(0x2000, 1234567u64);
+
+let value = mem.read_be::<u64>(0x2000);
+assert_eq!(1234567u64, value);
 ```
 
 ### Wrap a Memory implementation
