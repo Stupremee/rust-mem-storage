@@ -3,7 +3,12 @@ name = "mem_storage"
 version = "0.1.0"
 authors = ["Justus K <justus.k@protonmail.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+documentation = "https://docs.rs/mem_storage"
+repository = "https://github.com/Stupremee/rust-mem-storage"
+homepage = "https://github.com/Stupremee/rust-mem-storage"
+readme = "README.md"
+license = "Zlib OR Apache-2.0"
+keywords = ["emulator", "memory"]
+categories = ["emulators"]
 
 [dependencies]

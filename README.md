@@ -1,5 +1,8 @@
 # mem-storage
 
+[![Crates.io](https://img.shields.io/crates/v/mem_storage)](https://crates.io/crates/mem_storage)
+[![doc](https://img.shields.io/badge/rustdoc-mem_storage-blue.svg)](https://docs.rs/mem_storage)
+
 mem-storage is an abstraction over a chunk of memory, that is readable and writable.
 It can be used in in everything, that requires some sort of memory, e.g. the RAM in an emulator.
 This crate can also be used in no_std environment.
