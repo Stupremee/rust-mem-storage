@@ -14,11 +14,10 @@
 //!
 //! ### Use the Memory trait
 //!
-//! ```rust
-//! use mem_storage::{Memory, VecMemory};
+//! ```compile_fail
+//! use mem_storage::Memory;
 //!
-//! /// Create 1 KiB of memory
-//! let mem = VecMemory::new(1024 * 1024);
+//! let mem = MyMemory::new();
 //!
 //! /// The `read` and `write` method will read / write data using little endian format.
 //! /// For big endian format use `read_be` and `write_be`.
@@ -40,33 +39,50 @@
 //!
 //! ### Implement the Memory trait
 //!
-//! ```rust
+//! ```
+//! use mem_storage::Memory;
+//!
 //! /// This time your struct is responsible for storing the data.
-//! struct Memory {
+//! struct MyMemory {
 //!   ram: Vec<u8>,
 //! }
 //!
-//! impl Memory {
+//! impl MyMemory {
 //!   fn new() -> Self {
 //!     // Create 1KiB of zero initialized memory
 //!     Self { ram: vec![0u8; 1024 * 1024] }
 //!   }
 //! }
 //!
-//! impl mem_storage::Memory for Memory {
+//! impl Memory for MyMemory {
 //!   /// If an `Err` is returned, the addr is out of bounds
 //!   type Error = ();
 //!
+//!   fn get<I>(&self, index: I) -> Result<&I::Output, Self::Error>
+//!   where
+//!       I: std::slice::SliceIndex<[u8]>,
+//!   {
+//!       self.ram.get(index).ok_or(())
+//!   }
+//!
+//!   fn get_mut<I>(&mut self, index: I) -> Result<&mut I::Output, Self::Error>
+//!   where
+//!       I: std::slice::SliceIndex<[u8]>,
+//!   {
+//!       self.ram.get_mut(index).ok_or(())
+//!   }
+//!
 //!   fn try_read_byte(&self, addr: usize) -> Result<u8, Self::Error> {
-//!     self.ram.get(addr).map_err(|_| ())
+//!     self.ram.get(addr).copied().ok_or(())
 //!   }
 //!
-//!   fn try_write_byte(&self, addr: usize, value: u8) -> Result<(), Self::Error> {
-//!     let mut value = self.ram.get(addr).map_err(|_| ())?;
-//!     *value = value;
+//!   fn try_write_byte(&mut self, addr: usize, value: u8) -> Result<(), Self::Error> {
+//!     let mut value = self.ram.get_mut(addr).ok_or(())?;
+//!     *value = *value;
+//!     Ok(())
 //!   }
 //!
-//!   /// The trait will provide a generic `read` and `read_be` method for you.
+//!   // The trait will provide a generic `read` and `read_be` method for you.
 //! }
 //! ```
 //!
@@ -97,7 +113,7 @@ pub trait Memory {
 
     /// Returns a mutable reference to an element or subslice depending on the type of
     /// index.
-    fn get_mut<I>(&self, index: I) -> Result<&mut I::Output, Self::Error>
+    fn get_mut<I>(&mut self, index: I) -> Result<&mut I::Output, Self::Error>
     where
         I: SliceIndex<[u8]>;
 
@@ -170,7 +186,7 @@ pub trait Memory {
     /// Tries to write a generic `Value` to the given address using little endian format.
     ///
     /// Returns `Err(x)` if the method failed to write a value to the address.
-    fn try_write<V: Value>(&self, addr: usize, val: V) -> Result<(), Self::Error> {
+    fn try_write<V: Value>(&mut self, addr: usize, val: V) -> Result<(), Self::Error> {
         let size = core::mem::size_of::<V>();
         let val = val.to_le();
         let slice = self.get_mut(addr..addr + size)?;
@@ -188,7 +204,7 @@ pub trait Memory {
     /// Writes a generic `Value` to the given address using little endian format.
     ///
     /// Panics if the method failed to write a value to the address.
-    fn write<V: Value>(&self, addr: usize, val: V) {
+    fn write<V: Value>(&mut self, addr: usize, val: V) {
         self.try_write::<V>(addr, val)
             .expect("failed to write memory")
     }
@@ -196,14 +212,14 @@ pub trait Memory {
     /// Tries to write a generic `Value` to the given address using big endian format.
     ///
     /// Returns `Err(x)` if the method failed to write a value to the address.
-    fn try_write_be<V: Value>(&self, addr: usize, val: V) -> Result<(), Self::Error> {
+    fn try_write_be<V: Value>(&mut self, addr: usize, val: V) -> Result<(), Self::Error> {
         self.try_write(addr, val.to_be())
     }
 
     /// Writes a generic `Value` to the given address using big endian format.
     ///
     /// Panics if the method failed to write a value to the address.
-    fn write_be<V: Value>(&self, addr: usize, val: V) {
+    fn write_be<V: Value>(&mut self, addr: usize, val: V) {
         self.write(addr, val.to_be());
     }
 }
