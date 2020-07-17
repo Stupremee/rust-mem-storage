@@ -153,6 +153,20 @@ pub trait Memory {
         self.try_read::<V>(addr).expect("failed to read memory")
     }
 
+    /// Tries to read a generic `Value` at the given address using big endian format.
+    ///
+    /// Returns `Err(x)` if the method failed to read a value at the address.
+    fn try_read_be<V: Value>(&self, addr: usize) -> Result<V, Self::Error> {
+        self.try_read(addr).map(Value::to_be)
+    }
+
+    /// Reads a generic `Value` at the given address using big endian format.
+    ///
+    /// Panics if the method failed to read a value at the address.
+    fn read_be<V: Value>(&self, addr: usize) -> V {
+        self.read::<V>(addr).to_be()
+    }
+
     /// Tries to write a generic `Value` to the given address using little endian format.
     ///
     /// Returns `Err(x)` if the method failed to write a value to the address.
@@ -177,6 +191,20 @@ pub trait Memory {
     fn write<V: Value>(&self, addr: usize, val: V) {
         self.try_write::<V>(addr, val)
             .expect("failed to write memory")
+    }
+
+    /// Tries to write a generic `Value` to the given address using big endian format.
+    ///
+    /// Returns `Err(x)` if the method failed to write a value to the address.
+    fn try_write_be<V: Value>(&self, addr: usize, val: V) -> Result<(), Self::Error> {
+        self.try_write(addr, val.to_be())
+    }
+
+    /// Writes a generic `Value` to the given address using big endian format.
+    ///
+    /// Panics if the method failed to write a value to the address.
+    fn write_be<V: Value>(&self, addr: usize, val: V) {
+        self.write(addr, val.to_be());
     }
 }
 
