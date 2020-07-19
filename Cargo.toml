@@ -1,6 +1,6 @@
 [package]
 name = "mem_storage"
-version = "0.1.1"
+version = "0.1.2-alpha.0"
 authors = ["Justus K <justus.k@protonmail.com>"]
 edition = "2018"
 description = "Abstractions for readable and writable memory. Designed to be uesd in emulators."
