@@ -1,4 +1,4 @@
-use mem_storage::Memory;
+use mem_storage::MemoryStorage;
 
 struct TestMemory {
     ram: Vec<u8>,
@@ -12,7 +12,7 @@ impl TestMemory {
     }
 }
 
-impl Memory for TestMemory {
+impl MemoryStorage for TestMemory {
     type Error = ();
 
     fn get<I>(&self, index: I) -> Result<&I::Output, Self::Error>

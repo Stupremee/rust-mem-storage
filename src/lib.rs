@@ -12,10 +12,10 @@
 //!
 //! ## Usage
 //!
-//! ### Use the Memory trait
+//! ### Use the MemoryStorage trait
 //!
 //! ```compile_fail
-//! use mem_storage::Memory;
+//! use mem_storage::MemoryStorage;
 //!
 //! let mem = MyMemory::new();
 //!
@@ -40,7 +40,7 @@
 //! ### Implement the Memory trait
 //!
 //! ```
-//! use mem_storage::Memory;
+//! use mem_storage::MemoryStorage;
 //!
 //! /// This time your struct is responsible for storing the data.
 //! struct MyMemory {
@@ -54,7 +54,7 @@
 //!   }
 //! }
 //!
-//! impl Memory for MyMemory {
+//! impl MemoryStorage for MyMemory {
 //!   /// If an `Err` is returned, the addr is out of bounds
 //!   type Error = ();
 //!
@@ -99,7 +99,7 @@ use core::slice::SliceIndex;
 
 /// The `Memory` trait represents a chunk of memory that can read from,
 /// or written to.
-pub trait Memory {
+pub trait MemoryStorage {
     /// The `Error` type can be used to indicate if memory access was invalid.
     ///
     /// Usually this is just `()` and if `Err(())` is returned, it means that the address is out of bounds.

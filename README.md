@@ -15,10 +15,10 @@ a `struct Memory` over and over again and always copy paste methods like
 
 ## Usage
 
-### Use the Memory trait
+### Use the MemoryStorage trait
 
 ```rust
-use mem_storage::Memory;
+use mem_storage::MemoryStorage;
 
 let mem = MyMemory::new();
 
@@ -40,10 +40,10 @@ let value = mem.read_be::<u64>(0x2000);
 assert_eq!(1234567u64, value);
 ```
 
-### Implement the Memory trait
+### Implement the MemoryStorage trait
 
 ```rust
-use mem_storage::Memory;
+use mem_storage::MemoryStorage;
 
 /// This time your struct is responsible for storing the data.
 struct MyMemory {
@@ -57,7 +57,7 @@ impl MyMemory {
   }
 }
 
-impl Memory for MyMemory {
+impl MemoryStorage for MyMemory {
   /// If an `Err` is returned, the addr is out of bounds
   type Error = ();
 
